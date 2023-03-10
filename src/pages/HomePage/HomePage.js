@@ -1,29 +1,52 @@
-import styled from "styled-components"
+import styled from "styled-components";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function HomePage() {
+
+    const [moviesImage, setMoviesImage] = useState(null);
+
+    useEffect(() => {
+
+        const url = "https://mock-api.driven.com.br/api/v8/cineflex/movies";
+        const promisse = axios.get(url);
+
+        promisse.then(resp => {
+            setMoviesImage(resp.data);
+        });
+
+        promisse.catch(err => {
+            setMoviesImage(err.response.data)
+            console.log();
+        });
+
+    }, []);
+
+
+    if (moviesImage === null) {
+        return <p>CARREGANDO...</p>;
+    }
+
     return (
         <PageContainer>
-            Selecione o filme
+            Selecione o Filme
 
             <ListContainer>
-                <MovieContainer>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster"/>
-                </MovieContainer>
+                {moviesImage.map(filme => {
+                    return (
+                        <Link to={`/sessoes/${filme.id}`} key={filme.id}>
+                            <MovieContainer>
+                                <img src={filme.posterURL} alt={filme.title} />
+                            </MovieContainer>
+                        </Link>
+                    )
+                })}
 
-                <MovieContainer>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster"/>
-                </MovieContainer>
-
-                <MovieContainer>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster"/>
-                </MovieContainer>
-
-                <MovieContainer>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster"/>
-                </MovieContainer>
             </ListContainer>
 
         </PageContainer>
+
     )
 }
 
