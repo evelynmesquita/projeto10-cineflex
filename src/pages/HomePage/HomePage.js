@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Spinner from "../../components/Spinner";
 
 export default function HomePage() {
 
@@ -25,7 +26,7 @@ export default function HomePage() {
 
 
     if (moviesImage === null) {
-        return <p>CARREGANDO...</p>;
+        return <Spinner></Spinner>;
     }
 
     return (

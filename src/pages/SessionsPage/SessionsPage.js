@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import Session from "./Session";
+import Spinner from "../../components/Spinner";
 
 export default function SessionsPage() {
 
@@ -23,7 +24,7 @@ export default function SessionsPage() {
     }, []);
 
     if (movie === undefined){
-        return <p>Carregando</p>;
+        return <Spinner></Spinner>;
     }
 
     return (
