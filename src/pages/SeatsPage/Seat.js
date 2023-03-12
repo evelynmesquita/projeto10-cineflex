@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export default function Assento({ filme }) {
+export default function Seat({ filme }) {
     return (
         filme.seats.map(seat => {
             return <SeatItem
