@@ -5,10 +5,10 @@ export default function Session({filme}){
     return (
         filme.days.map( hor => {
             return (
-                <SessionContainer key={hor.id}>
+                <SessionContainer data-test="movie-day" key={hor.id}>
                     {hor.weekday} - {hor.date}
                     <ButtonsContainer>
-                        <SessionHour hor={hor}/>
+                        <SessionHour data-test="showtime" hor={hor}/>
                     </ButtonsContainer>
                 </SessionContainer>
             )

@@ -31,7 +31,7 @@ export default function Seat({ seatList, selected, setSelected, inputName, cpfIn
                 }
             }
 
-            return <SeatItem onClick={() => seatSelect()} key={seat.id} COLLORS={COLLORS} isAvailable={seat.isAvailable}>{seat.name}</SeatItem>
+            return <SeatItem data-test="seat" onClick={() => seatSelect()} key={seat.id} COLLORS={COLLORS} isAvailable={seat.isAvailable}>{seat.name}</SeatItem>
         })
     )
 }

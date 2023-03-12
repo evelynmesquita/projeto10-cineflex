@@ -7,25 +7,25 @@ export default function SuccessPage( {selected, purchase} ) {
         <PageContainer>
             <h1>Pedido feito com sucesso!</h1>
 
-            <TextContainer>
+            <TextContainer data-test="movie-info">
                 <strong><p>Filme e sessão</p></strong>
                 <p>{purchase.nomeFilme}</p>
                 <p>{purchase.diaFilme} - {purchase.horaFilme}</p>
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="seats-info">
                 <strong><p>Ingressos</p></strong>
                 {selected.ids.map( assento => <p key={assento}>Assento {assento}</p>)}
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="client-info">
                 <strong><p>Comprador</p></strong>
                 <p>Nome: {selected.name.inputName}</p>
                 <p>CPF: {selected.cpf.cpfInput}</p>
             </TextContainer>
 
             <Link to={"/"}>
-                <button>Voltar para Home</button>            
+                <button data-test="go-home-btn"> Voltar para Home</button>            
             </Link>
         </PageContainer>
     )

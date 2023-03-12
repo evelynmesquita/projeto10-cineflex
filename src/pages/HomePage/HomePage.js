@@ -43,7 +43,7 @@ export default function HomePage({ setSelected }) {
                 {moviesImage.map(filme => {
                     return (
                         <Link to={`/sessoes/${filme.id}`} key={filme.id}>
-                            <MovieContainer>
+                            <MovieContainer data-test="movie">
                                 <img src={filme.posterURL} alt={filme.title} />
                             </MovieContainer>
                         </Link>
