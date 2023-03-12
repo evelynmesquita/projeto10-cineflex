@@ -9,16 +9,16 @@ const ContainerLoader = styled.div`
   justify-content: center;
   align-items: center;
   margin: auto;
-  margin-top: 100px;
+  margin-top: 150px;
 
 `
 
 const Loader = styled.div`
     border: 10px solid #f3f3f3;
-    border-top: 10px solid #3498db;
+    border-top: 10px solid rgb(232, 131, 58);
     border-radius: 50%;
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     animation: spin 1s linear infinite;
 
     @keyframes spin {

@@ -1,31 +1,32 @@
-import styled from "styled-components"
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-export default function SuccessPage() {
+export default function SuccessPage( {selected, purchase} ) {
 
     return (
         <PageContainer>
-            <h1>Pedido feito <br /> com sucesso!</h1>
+            <h1>Pedido feito com sucesso!</h1>
 
             <TextContainer>
                 <strong><p>Filme e sessão</p></strong>
-                <p>Tudo em todo lugar ao mesmo tempo</p>
-                <p>03/03/2023 - 14:00</p>
+                <p>{purchase.nomeFilme}</p>
+                <p>{purchase.diaFilme} - {purchase.horaFilme}</p>
             </TextContainer>
 
             <TextContainer>
                 <strong><p>Ingressos</p></strong>
-                <p>Assento 01</p>
-                <p>Assento 02</p>
-                <p>Assento 03</p>
+                {selected.ids.map( assento => <p key={assento}>Assento {assento}</p>)}
             </TextContainer>
 
             <TextContainer>
                 <strong><p>Comprador</p></strong>
-                <p>Nome: Letícia Chijo</p>
-                <p>CPF: 123.456.789-10</p>
+                <p>Nome: {selected.name.inputName}</p>
+                <p>CPF: {selected.cpf.cpfInput}</p>
             </TextContainer>
 
-            <button>Voltar para Home</button>
+            <Link to={"/"}>
+                <button>Voltar para Home</button>            
+            </Link>
         </PageContainer>
     )
 }
@@ -39,7 +40,7 @@ const PageContainer = styled.div`
     color: #293845;
     margin: 30px 20px;
     padding-bottom: 120px;
-    padding-top: 70px;
+    padding-top: 80px;
     a {
         text-decoration: none;
     }
@@ -56,6 +57,8 @@ const PageContainer = styled.div`
         align-items: center;
         text-align: center;
         color: #247A6B;
+        width: 150px;
+        padding-bottom: 10px;
     }
 `
 const TextContainer = styled.div`

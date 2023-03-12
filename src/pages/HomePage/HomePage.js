@@ -4,9 +4,15 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Spinner from "../../components/Spinner";
 
-export default function HomePage() {
+export default function HomePage({ setSelected }) {
 
     const [moviesImage, setMoviesImage] = useState(null);
+
+    useEffect(() => {
+        const cleanID = { ids: [], name: "", cpf: "" };
+        setSelected(cleanID);
+    }, []);
+
 
     useEffect(() => {
 

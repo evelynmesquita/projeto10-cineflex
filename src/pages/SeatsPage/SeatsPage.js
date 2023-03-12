@@ -1,33 +1,60 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
-import styled from "styled-components"
 import axios from "axios";
-import Seat from "./Seat";
+import Assento from "./Seat";
+import styled from "styled-components"
+import { useEffect, useState } from "react";
 import Spinner from "../../components/Spinner";
+import { useNavigate, useParams } from "react-router-dom"
 
-export default function SeatsPage() {
+export default function SeatsPage({ selected, setSelected, setPurchase }) {
 
-    const [movie, setMovie] = useState(undefined);
+    const COLLORS = [
+        { nome: "Selecionado", cor: "#1AAE9E", borda: "#0E7D71" },
+        { nome: "Disponível", cor: "#C3CFD9", borda: "#808F9D" },
+        { nome: "Indisponível", cor: "#FBE192", borda: "#F7C52B" },
+    ]
+
+    const [seatList, setSeatList] = useState(undefined);
     const { idSessao } = useParams();
-    const [colorSeat, setColorSeat] = useState(true);
+    const [inputName, setInputName] = useState("");
+    const [cpfInput, setCpfInput] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`;
+        const URL = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`;
 
-        const promise = axios.get(url);
+        const promise = axios.get(URL);
         promise.then(res => {
-            setMovie(res.data);
+            const confirm = { nomeFilme: res.data.movie.title, diaFilme: res.data.day.date, horaFilme: res.data.name };
+            setPurchase(confirm);
+            const seatList = res.data;
+            setSeatList(seatList);
         })
         promise.catch(err => {
             console.log(err.response.data);
-
         })
-
 
     }, [])
 
-    if (movie === undefined) {
-        return <Spinner></Spinner>
+    if (seatList === undefined) {
+        return <Spinner></Spinner>;
+    }
+
+    function enviarCompra(event) {
+        event.preventDefault();
+        if (selected.ids.length !== 0) {
+            const body = { ids: [...selected.ids], name: { inputName }, cpf: { cpfInput } };
+            setSelected(body);
+
+            const URL = "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many";
+            const promise = axios.post(URL, body);
+
+            promise.then(res => {
+                navigate("/sucesso")
+                console.log(res);
+
+            });
+            promise.catch(err => { alert(`Erro: ${err.response.data}`) });
+        }
     }
 
     return (
@@ -35,41 +62,43 @@ export default function SeatsPage() {
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                <Seat filme={movie} />
+                <Assento seatList={seatList} selected={selected} setSelected={setSelected} inputName={inputName} cpfInput={cpfInput} />
             </SeatsContainer>
 
             <CaptionContainer>
                 <CaptionItem>
-                    <CaptionCircle colorSeat={null} />
+                    <CaptionCircle COLLORS={COLLORS} cor={COLLORS[0].nome} />
                     Selecionado
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle colorSeat={true} />
+                    <CaptionCircle COLLORS={COLLORS} cor={COLLORS[1].nome} />
                     Disponível
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle colorSeat={false} />
+                    <CaptionCircle COLLORS={COLLORS} cor={COLLORS[2].nome} />
                     Indisponível
                 </CaptionItem>
             </CaptionContainer>
 
             <FormContainer>
-                Nome do Comprador:
-                <input placeholder="Digite seu nome..." />
+                <form onSubmit={enviarCompra}>
+                    <label htmlFor="campoNome">Nome do Comprador:</label>
+                    <input placeholder="Digite seu nome..." id="campoNome" type="text" value={inputName} onChange={e => setInputName(e.target.value)} required />
 
-                CPF do Comprador:
-                <input placeholder="Digite seu CPF..." />
+                    <label htmlFor="campoCPF">CPF do Comprador:</label>
+                    <input placeholder="Digite seu CPF..." id="campoCPF" type="number" value={cpfInput} onChange={e => setCpfInput(e.target.value)} required />
 
-                <button>Reservar Assento(s)</button>
+                    <button >Reservar Assento(s)</button>
+                </form>
             </FormContainer>
 
             <FooterContainer>
                 <div>
-                    <img src={movie.movie.posterURL} alt="poster" />
+                    <img src={seatList.movie.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>{movie.movie.title}</p>
-                    <p>{movie.day.weekday} - {movie.name} </p>
+                    <p>{seatList.movie.title}</p>
+                    <p>{seatList.day.weekday} - {seatList.name} </p>
                 </div>
             </FooterContainer>
 
@@ -112,6 +141,7 @@ const FormContainer = styled.div`
         width: calc(100vw - 60px);
     }
 `
+
 const CaptionContainer = styled.div`
     display: flex;
     flex-direction: row;
@@ -119,9 +149,28 @@ const CaptionContainer = styled.div`
     justify-content: space-between;
     margin: 20px;
 `
+
 const CaptionCircle = styled.div`
-    border: 1px solid ${props => props.colorSeat === null ? "#0E7D71" : props.colorSeat === true ? "#808F9D" : "#F7C52B"};
-    background-color: ${props => props.colorSeat === null ? "#1AAE9E" : props.colorSeat === true ? "#C3CFD9" : "#FBE192"};
+    border: 1px solid ${props => {
+        if (props.cor === "Disponível") {
+            return props.COLLORS[1].borda;
+        } else if (props.cor === "Indisponível") {
+            return props.COLLORS[2].borda;
+        } else {
+            return props.COLLORS[0].borda;
+        }
+    }};
+
+    background-color: ${props => {
+        if (props.cor === "Disponível") {
+            return props.COLLORS[1].cor;
+        } else if (props.cor === "Indisponível") {
+            return props.COLLORS[2].cor;
+        } else {
+            return props.COLLORS[0].cor;
+        }
+    }};
+
     height: 25px;
     width: 25px;
     border-radius: 25px;
@@ -146,6 +195,7 @@ const FooterContainer = styled.div`
     font-size: 20px;
     position: fixed;
     bottom: 0;
+
     div:nth-child(1) {
         box-shadow: 0px 2px 4px 2px #0000001A;
         border-radius: 3px;
@@ -171,15 +221,4 @@ const FooterContainer = styled.div`
             }
         }
     }
-`
-const Carregando = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 300px;
-    font-family: 'Roboto';
-    font-size: 24px;
-    text-align: center;
-    color: #293845;
 `
