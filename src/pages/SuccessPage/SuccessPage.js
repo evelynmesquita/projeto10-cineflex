@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-export default function SuccessPage( {selected, purchase, seatSelected} ) {
+export default function SuccessPage( {
+        selected, 
+        purchase, 
+        seatSelected
+    } ) {
 
     return (
         <PageContainer>
