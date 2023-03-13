@@ -1,14 +1,14 @@
 import styled from "styled-components";
 import SessionHour from "./SessionHour";
 
-export default function Session({filme}){
+export default function Session({ movie }) {
     return (
-        filme.days.map( hor => {
+        movie.days.map(hour => {
             return (
-                <SessionContainer data-test="movie-day" key={hor.id}>
-                    {hor.weekday} - {hor.date}
+                <SessionContainer data-test="movie-day" key={hour.id}>
+                    {hour.weekday} - {hour.date}
                     <ButtonsContainer>
-                        <SessionHour data-test="showtime" hor={hor}/>
+                        <SessionHour hour={hour} />
                     </ButtonsContainer>
                 </SessionContainer>
             )

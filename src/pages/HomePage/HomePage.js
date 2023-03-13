@@ -1,32 +1,32 @@
-import styled from "styled-components";
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Spinner from "../../components/Spinner";
 
-export default function HomePage({ setSelected }) {
+export default function HomePage({ 
+        setSelected, 
+        setSeatSelected 
+    }) {
 
     const [moviesImage, setMoviesImage] = useState(null);
 
-    useEffect(() => {
-        const cleanID = { ids: [], name: "", cpf: "" };
-        setSelected(cleanID);
-    }, []);
-
 
     useEffect(() => {
 
-        const url = "https://mock-api.driven.com.br/api/v8/cineflex/movies";
-        const promisse = axios.get(url);
+        const promisse = axios.get("https://mock-api.driven.com.br/api/v8/cineflex/movies");
 
         promisse.then(resp => {
             setMoviesImage(resp.data);
         });
 
-        promisse.catch(err => {
-            setMoviesImage(err.response.data)
-            console.log();
+        promisse.catch(error => {
+            setMoviesImage(error.response.data)
         });
+
+        const cleanID = { ids: [], name: "", cpf: "" };
+        setSelected(cleanID);
+        setSeatSelected([]);
 
     }, []);
 
@@ -42,11 +42,11 @@ export default function HomePage({ setSelected }) {
             <ListContainer>
                 {moviesImage.map(filme => {
                     return (
-                        <Link to={`/sessoes/${filme.id}`} key={filme.id}>
-                            <MovieContainer data-test="movie">
+                        <MovieContainer data-test="movie" key={filme.id}>
+                            <Link to={`/sessoes/${filme.id}`}>
                                 <img src={filme.posterURL} alt={filme.title} />
-                            </MovieContainer>
-                        </Link>
+                            </Link>
+                        </MovieContainer>
                     )
                 })}
 

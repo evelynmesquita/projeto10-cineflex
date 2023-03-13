@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-export default function SuccessPage( {selected, purchase} ) {
+export default function SuccessPage( {selected, purchase, seatSelected} ) {
 
     return (
         <PageContainer>
@@ -15,21 +15,22 @@ export default function SuccessPage( {selected, purchase} ) {
 
             <TextContainer data-test="seats-info">
                 <strong><p>Ingressos</p></strong>
-                {selected.ids.map( assento => <p key={assento}>Assento {assento}</p>)}
+                {selected.ids.map( (assento,indice) => <p key={assento}>Assento {seatSelected[indice]}</p>)}
             </TextContainer>
 
             <TextContainer data-test="client-info">
                 <strong><p>Comprador</p></strong>
-                <p>Nome: {selected.name.inputName}</p>
-                <p>CPF: {selected.cpf.cpfInput}</p>
+                <p>Nome: {selected.name}</p>
+                <p>CPF: {selected.cpf}</p>
             </TextContainer>
 
-            <Link to={"/"}>
-                <button data-test="go-home-btn"> Voltar para Home</button>            
+            <Link to={"/"} data-test="go-home-btn">
+                <button>Voltar para Home</button>            
             </Link>
         </PageContainer>
     )
 }
+
 
 const PageContainer = styled.div`
     display: flex;

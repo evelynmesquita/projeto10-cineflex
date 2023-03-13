@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 
-export default function SessionHour({ hor }) {
+export default function SessionHour({ hour }) {
     return (
-        hor.showtimes.map(hourMovie => {
-            return <Link to={`/assentos/${hourMovie.id}`}
-                key={hourMovie.id}>
-                <button>{hourMovie.name}</button></Link>
+        hour.showtimes.map(horario => {
+            return <Link to={`/assentos/${horario.id}`}
+                key={horario.id}>
+                <button data-test="showtime">{horario.name}</button>
+            </Link>
         })
     )
 }

@@ -1,46 +1,45 @@
+import axios from "axios";
+import Session from "./Session";
+import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import axios from "axios";
-import Sessao from "./Session";
 import Spinner from "../../components/Spinner";
 
 export default function SessionsPage() {
 
-    const [filme, setFilme] = useState(undefined);
-    const { idFilme } = useParams();
+    const [movie, setMovie] = useState(undefined);
+    const {idFilme} = useParams();
 
     useEffect(() => {
-        
         const url = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`;
 
         const promise = axios.get(url);
         promise.then(resp => {
-            setFilme(resp.data);
+            setMovie(resp.data);
         });
-        promise.catch(error => {
+        promise.catch( error => {
             console.log(error.response.data);
         });
 
     }, []);
 
-    if (filme === undefined) {
-        return <Spinner></Spinner>;
+    if (movie === undefined){
+        return <Spinner>CARREGANDO...</Spinner>;
     }
 
     return (
         <PageContainer>
             Selecione o horário
             <div>
-                <Sessao filme={filme} />
+                <Session movie={movie}/>
             </div>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
-                    <img src={filme.posterURL} alt={filme.title} />
+                    <img src={movie.posterURL} alt={movie.title} />
                 </div>
                 <div>
-                    <p>{filme.title}</p>
+                    <p>{movie.title}</p>
                 </div>
             </FooterContainer>
 

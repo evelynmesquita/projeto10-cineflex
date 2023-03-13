@@ -11,6 +11,7 @@ export default function App() {
 
     const [selected, setSelected] = useState({ ids: [], name: "", cpf: "" });
     const [purchase, setPurchase] = useState({ nomeFilme: "", diaFilme: "", horaFilme: "" });
+    const [seatSelected, setSeatSelected] = useState([]);
 
     return (
         <BrowserRouter>
@@ -18,23 +19,24 @@ export default function App() {
 
             <Routes>
                 <Route path="/" element={<HomePage
-                    selected={selected}
-                    setSelected={setSelected} />} />
+                        selected={selected}
+                        setSelected={setSelected}
+                        setSeatSelected={setSeatSelected} />} />
 
-                <Route path="/assentos/:idSessao"
-                    element={<SeatsPage
+                <Route path="/assentos/:idSessao" element={<SeatsPage
                         selected={selected}
                         setSelected={setSelected}
                         purchase={purchase}
-                        setPurchase={setPurchase} />} />
+                        setPurchase={setPurchase}
+                        seatSelected={seatSelected}
+                        setSeatSelected={setSeatSelected} />} />
 
-                <Route path="/sessoes/:idFilme"
-                    element={<SessionsPage />} />
+                <Route path="/sessoes/:idFilme" element={<SessionsPage />} />
 
-                <Route path="/sucesso"
-                    element={<SuccessPage
+                <Route path="/sucesso" element={<SuccessPage
                         selected={selected}
-                        purchase={purchase} />} />
+                        purchase={purchase}
+                        seatSelected={seatSelected} />} />
             </Routes>
         </BrowserRouter>
     )
